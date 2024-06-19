@@ -16,14 +16,14 @@ The use of the scripts require the next version of these tools (the number in br
 - Taxonomic affiliation (7): ITSx v.1.1 to extract ITS from the assembled genome. Blast agains [UNITE database](https://unite.ut.ee/)
 - Gene prediction (8): GeneMark-ES v.4.30 (RepeatModeler v.2.0.4 and RepeatMasker to identify transposable elemments)
 - Secretome (9): SignalP v.6.0 (signal peptide) - TMHMM v.2.0c (to identify transmembrane domains) - Prosite v.6.0 (proteins retained in endoplasmatic reticulum) = secreted proteins
-- Transporters (10): local blastp against TCDB database. Download BLAST+ from https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html and TCDB (All Proteins in TCDB) from [https://www.ebi.ac.uk/merops/download_list.shtml](https://www.tcdb.org/download.php)
-- Secondary metabolism (11): antiSMASH v.7.0 (https://fungismash.secondarymetabolites.org/#!/start)
-- CAZYmes (12): CUPP v.2.1.0 (https://cupp.info/submit) or DBCan3 v.12.0 (https://bcb.unl.edu/dbCAN2/blast.php)
-- Proteases (13): local blastp against MEROPS database. Download BLAST+ from https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html and MEROPS (3. Peptidase Protein Sequences) from https://www.ebi.ac.uk/merops/download_list.shtml
-- Effectors (14): EffectorP v.3.0 (https://effectorp.csiro.au/)
-- Metabolic pathways (KEGG) (15): BlastKoala (https://www.kegg.jp/blastkoala/)
+- Transporters (10): local blastp against TCDB database. 
+- Secondary metabolism (11): [antiSMASH](https://fungismash.secondarymetabolites.org/#!/start) v.7.0 
+- CAZYmes (12): [CUPP](https://cupp.info/submit) v.2.1.0 or [DBCan3](https://bcb.unl.edu/dbCAN2/blast.php) v.12.0
+- Proteases (13): local blastp against [MEROPS database](https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html)
+- Effectors (14): [EffectorP](https://effectorp.csiro.au/) v.3.0
+- Metabolic pathways (KEGG) (15): [BlastKoala](https://www.kegg.jp/blastkoala/)
 - Gene ontology (GO) (16): InterProScan v.5.66-98.0
-- Cluster of orthologies (COG) (17): EggNOG mapper v.2.1.12 (http://eggnog-mapper.embl.de/)
+- Cluster of orthologies (COG) (17): [EggNOG MApper](http://eggnog-mapper.embl.de/) v.2.1.12
 
 ## WORKFLOW
 
@@ -46,6 +46,10 @@ The use of the scripts require the next version of these tools (the number in br
 12.1. You can get a very general summary of the GO functions. Download [GO database ](https://geneontology.org/docs/download-ontology/) (go-basic.obo). Transform it in a manageable databse using [R](https://posit.co/download/rstudio-desktop/) and this script [obo-database.sh](https://github.com/gmonteoliva/Functional-annotation-of-a-plant-associated-fungus/blob/main/obo-database.sh). Then we can parse our file with all GO_terms with the database and get a summary of the functions of our genome
 13. Transporters: Download [BLAST+](https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html) and [Transporters database, TCDB](https://www.ebi.ac.uk/merops/download_list.shtml) (All Proteins in TCDB). Use [transporters.sh](https://github.com/gmonteoliva/Functional-annotation-of-a-plant-associated-fungus/blob/main/transporters.sh) to get the transporters and classify them
 14. Secondary metabolism: do it via web [antiSMASH](https://fungismash.secondarymetabolites.org/#!/start)
-15. Secreted proteins (Secretome): You need to predict proteins with signal peptide using [08-signalp.sh](https://github.com/gmonteoliva/Functional-annotation-of-a-plant-associated-fungus/blob/main/08-signalp.sh). To that result you need to remove those proteins with transmembrane domain that you can predict using [08-tmhmm.sh](https://github.com/gmonteoliva/Functional-annotation-of-a-plant-associated-fungus/blob/main/08-tmhmm.sh). Finally, there are also proteins with signal peptide that are retained in the endoplasmatic reticulum. So, you need to remove those ones predict with [ProSite](https://prosite.expasy.org/scanprosite/)
 
+### Functional annotation for plant-fungae interaction (input for the next programs is the Secretome)
+15. Secreted proteins (Secretome): You need to predict proteins with signal peptide using [08-signalp.sh](https://github.com/gmonteoliva/Functional-annotation-of-a-plant-associated-fungus/blob/main/08-signalp.sh). To that result you need to remove those proteins with transmembrane domain that you can predict using [08-tmhmm.sh](https://github.com/gmonteoliva/Functional-annotation-of-a-plant-associated-fungus/blob/main/08-tmhmm.sh). Finally, there are also proteins with signal peptide that are retained in the endoplasmatic reticulum. So, you need to remove those ones predict with [ProSite](https://prosite.expasy.org/scanprosite/)
+16. CAZYmes: there are 2 posibilities [CUPP](https://cupp.info/submit) or [DBCan3](https://bcb.unl.edu/dbCAN2/blast.php), both via web. We got better performance with DBCan3. Furthermore, there is a group of CAZYmes that does not appear in CUPP (Carbon Binding Modules, CBM), that has high relevance in endophytic fungae. Also, for DBCan3 we pick the 3 tools that provide (predicción HMMER: dbCAN, DIAMOND: CAZy,  HMMER: dbCAN-sub) and we take as CAZYme the predicted proteins by atleast2 out of 3 of these tools.
+17. Proteases: we follow the same procedure as Transportes, but in this case we need to download MEROPS database, specifically [3. Peptidase Protein Sequences](https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html). Then adapt [transporters.sh](https://github.com/gmonteoliva/Functional-annotation-of-a-plant-associated-fungus/blob/main/transporters.sh) script to your peptidase database.
+18. Effectors: via web [EffectorP](https://effectorp.csiro.au/)
 
